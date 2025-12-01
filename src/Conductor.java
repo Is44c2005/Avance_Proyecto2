@@ -56,9 +56,13 @@ public class Conductor {
 
     @Override
     public String toString() {
-        return "Conductor{" +
-                "id=" + id +
-                ", nombre='" + nombre + '\n' +
-                ", estado=" + estado ;
+        String v = (vehiculoAsignado != null)
+                ? vehiculoAsignado.getPlaca()
+                : "Sin vehículo";
+        return "Conductor" +
+                ",  id: " + id +
+                ",  nombre: " + nombre + '\n' +
+                ",  estado: " + estado +
+                ",  vehiculo: "+ v;
     }
 }

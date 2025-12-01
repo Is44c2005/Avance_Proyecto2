@@ -90,9 +90,11 @@ public class Ventana {
                 seleccionado.asignarVehiculo(vehiculo);
                 vehiculo.setEstado(false); // Marcarlo como ocupado
 
-                llenarJlist();
+
                 llenarComboVehiculos();
                 JOptionPane.showMessageDialog(null, "Vehículo asignado correctamente");
+
+                llenarJlist();
             }
         });
     }

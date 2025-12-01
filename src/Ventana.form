@@ -78,7 +78,7 @@
                 <properties>
                   <model>
                     <item value="Activo"/>
-                    <item value="Pasivo"/>
+                    <item value="Inactivo"/>
                   </model>
                 </properties>
               </component>

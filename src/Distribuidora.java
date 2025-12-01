@@ -16,22 +16,9 @@ public class Distribuidora {
 
 
     public boolean buscarId(int id) {
-
-        int i = 0;
-        int s = conductors.size() - 1;
-        int c;
-
-        while (i <= s) {
-            c = (i + s) / 2;
-
-            if (id == conductors.get(c).getId()) {
+        for (Conductor c : conductors) {
+            if (c.getId() == id) {
                 return false;
-
-            } else if (id < conductors.get(c).getId()) {
-                s = c - 1;
-
-            } else {
-                i = c + 1;
             }
         }
         return true;
