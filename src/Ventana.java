@@ -14,6 +14,15 @@ public class Ventana {
     private JTextField txtidAsignar;
     private JComboBox cbmPlaca;
     private JSpinner spnIdAsignar;
+    private JButton btnOrdenarId;
+    private JButton mostrarPorEstadoButton;
+    private JComboBox cbmMostrarEstado;
+    private JButton btnConductoresVehiculo;
+    private JComboBox cbmConoSin;
+    private JList lstvehiculos;
+    private JButton btnMostrarSin;
+    private JButton btnMostrarCon;
+    private JButton btnCapacidad;
     Distribuidora distribuidora= new Distribuidora();
 
 
@@ -23,6 +32,13 @@ public class Ventana {
             dlm.addElement(c);
         }
         lstConductores.setModel(dlm);
+    }
+    public void llenarJlist2(){
+        DefaultListModel dlm= new DefaultListModel<>();
+        for (Vehiculo v: distribuidora.getVehiculos()){
+            dlm.addElement(v);
+        }
+        lstvehiculos.setModel(dlm);
     }
 
     public void llenarComboVehiculos() {
@@ -51,10 +67,10 @@ public class Ventana {
                         Conductor conductor= new Conductor(id,nombre, estado);
                         distribuidora.agregarConductor(conductor);
                     }
-                    llenarJlist();
                 }else {
                     JOptionPane.showMessageDialog(null,"Id invalido");
                 }
+                llenarJlist();
 
             }
         });
@@ -93,8 +109,85 @@ public class Ventana {
 
                 llenarComboVehiculos();
                 JOptionPane.showMessageDialog(null, "Vehículo asignado correctamente");
-
+                llenarJlist2();
+            }
+        });
+        btnOrdenarId.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                distribuidora.ordenarID();
                 llenarJlist();
+            }
+        });
+        mostrarPorEstadoButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                DefaultListModel dlm= new DefaultListModel<>();
+                if (cbmMostrarEstado.getSelectedItem().toString().equals("Activo")){
+                    for (Conductor c: distribuidora.getConductors()){
+                        if (c.isEstado()){
+                            dlm.addElement(c);
+                        }
+                    }
+                }else {
+                    for (Conductor c: distribuidora.getConductors()){
+                        if (!c.isEstado()){
+                            dlm.addElement(c);
+                        }
+                    }
+                }
+                lstConductores.setModel(dlm);
+            }
+        });
+        btnConductoresVehiculo.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                DefaultListModel dlm= new DefaultListModel<>();
+                if (cbmConoSin.getSelectedItem().toString().equals("Con Vehículo")){
+                    for (Conductor c: distribuidora.getConductors()){
+                        if (c.getVehiculoAsignado() != null){
+                            dlm.addElement(c);
+                        }
+                    }
+                }else {
+                    for (Conductor c: distribuidora.getConductors()){
+                        if (c.getVehiculoAsignado() == null){
+                            dlm.addElement(c);
+                        }
+                    }
+                }
+                lstConductores.setModel(dlm);
+            }
+        });
+        btnMostrarSin.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                DefaultListModel<Vehiculo> model = new DefaultListModel<>();
+                for (Vehiculo v : distribuidora.getVehiculos()) {
+                    if (v.isEstado()) {
+                        model.addElement(v);
+                    }
+                }
+                lstvehiculos.setModel(model);
+            }
+        });
+        btnMostrarCon.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                DefaultListModel<Vehiculo> model = new DefaultListModel<>();
+                for (Vehiculo v : distribuidora.getVehiculos()) {
+                    if (!v.isEstado()) {
+                        model.addElement(v);
+                    }
+                }
+                lstvehiculos.setModel(model);
+            }
+        });
+        btnCapacidad.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                distribuidora.ordenarCapacidad();
+                llenarJlist2();
             }
         });
     }

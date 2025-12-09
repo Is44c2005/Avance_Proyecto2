@@ -24,6 +24,34 @@ public class Distribuidora {
         return true;
     }
 
+    public void ordenarID (){
+        Conductor aux;
+
+        for (int i=0;i<conductors.size()-1;i++){
+            for (int j=i+1;j<conductors.size();j++){
+                if (conductors.get(i).getId()>conductors.get(j).getId()){
+                    aux = conductors.get(i);
+                    conductors.set(i,conductors.get(j));
+                    conductors.set(j,aux);
+                }
+            }
+        }
+    }
+
+    public void ordenarCapacidad (){
+        Vehiculo aux;
+
+        for (int i=0;i<vehiculos.size()-1;i++){
+            for (int j=i+1;j<vehiculos.size();j++){
+                if (vehiculos.get(i).getCapacidadMax()>vehiculos.get(j).getCapacidadMax()){
+                    aux = vehiculos.get(i);
+                    vehiculos.set(i,vehiculos.get(j));
+                    vehiculos.set(j,aux);
+                }
+            }
+        }
+    }
+
 
 
     public void agregarConductor(Conductor c){
