@@ -5,6 +5,24 @@ public class Distribuidora {
     private String nombre;
     private List<Conductor> conductors;
     private List<Vehiculo> vehiculos;
+    private ArrayList<Cliente> clientes = new ArrayList<>();
+    private ArrayList<Pedido> pedidos = new ArrayList<>();
+
+    public void agregarCliente(Cliente c) {
+        clientes.add(c);
+    }
+
+    public void agregarPedido(Pedido p) {
+        pedidos.add(p);
+    }
+
+    public ArrayList<Cliente> getClientes() {
+        return clientes;
+    }
+
+    public ArrayList<Pedido> getPedidos() {
+        return pedidos;
+    }
 
     public Distribuidora (){
         conductors =new ArrayList<Conductor>();

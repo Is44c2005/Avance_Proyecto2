@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 public class Ventana {
     private JTabbedPane tabbedPane1;
@@ -23,7 +24,21 @@ public class Ventana {
     private JButton btnMostrarSin;
     private JButton btnMostrarCon;
     private JButton btnCapacidad;
+    private JTextField txtIdCliente;
+    private JTextField txtNombreCliente;
+    private JButton btnRegistrarCliente;
+    private JList lstClientes;
+    private JSpinner spnIdPedido;
+    private JButton btnCrearPedido;
+    private JList lstPedidos;
+    private JTextField txtIdProducto;
+    private JTextField txtNombreProducto;
+    private JSpinner spnPeso;
+    private JSpinner spnPrecio;
+    private JButton btnAgregarProducto;
+    private JList lstProductos;
     Distribuidora distribuidora= new Distribuidora();
+    ArrayList<Pedido> pedidos = new ArrayList<>();
 
 
     public void llenarJlist(){
@@ -188,6 +203,96 @@ public class Ventana {
             public void actionPerformed(ActionEvent e) {
                 distribuidora.ordenarCapacidad();
                 llenarJlist2();
+            }
+        });
+        btnRegistrarCliente.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int id = Integer.parseInt(txtIdCliente.getText());
+                String nombre = txtNombreCliente.getText();
+
+                Cliente c = new Cliente(id, nombre);
+                distribuidora.agregarCliente(c);
+
+                DefaultListModel model = new DefaultListModel();
+                for (Cliente cli : distribuidora.getClientes()) {
+                    model.addElement(cli);
+                }
+                lstClientes.setModel(model);
+
+                JOptionPane.showMessageDialog(null, "Cliente registrado");
+            }
+        });
+        btnCrearPedido.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                Cliente clienteSeleccionado = (Cliente) lstClientes.getSelectedValue();
+
+                if (clienteSeleccionado == null) {
+                    JOptionPane.showMessageDialog(null, "Seleccione un cliente");
+                    return;
+                }
+
+                int idPedido = Integer.parseInt(spnIdPedido.getValue().toString());
+
+                Pedido pedido = new Pedido(idPedido, clienteSeleccionado);
+
+                pedidos.add(pedido); // AHORA sí funciona
+
+                DefaultListModel<Pedido> model = new DefaultListModel<>();
+                for (Pedido p : pedidos) {
+                    if (p.getCliente().equals(clienteSeleccionado)) {
+                        model.addElement(p);
+                    }
+                }
+                lstPedidos.setModel(model);
+
+                JOptionPane.showMessageDialog(null, "Pedido creado correctamente");
+            }
+        });
+        btnAgregarProducto.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Pedido pedidoSeleccionado = (Pedido) lstPedidos.getSelectedValue();
+
+                if (pedidoSeleccionado == null) {
+                    JOptionPane.showMessageDialog(null, "Seleccione un pedido");
+                    return;
+                }
+
+                // 2. Obtener datos del producto
+                int idProducto = Integer.parseInt(txtIdProducto.getText());
+                String nombre = txtNombreProducto.getText();
+                double peso = Double.parseDouble(spnPeso.getValue().toString());
+                double precio = Double.parseDouble(spnPrecio.getValue().toString());
+
+                // Validación básica
+                if (nombre.isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Ingrese el nombre del producto");
+                    return;
+                }
+
+                // 3. Crear producto
+                Producto producto = new Producto(idProducto, nombre, peso, precio);
+
+                // 4. Agregar producto al pedido
+                pedidoSeleccionado.agregarProducto(producto);
+
+                // 5. Actualizar lista de productos
+                DefaultListModel<Producto> model = new DefaultListModel<>();
+                for (Producto p : pedidoSeleccionado.getProductos()) {
+                    model.addElement(p);
+                }
+                lstProductos.setModel(model);
+
+                // 6. Limpiar campos
+                txtIdProducto.setText("");
+                txtNombreProducto.setText("");
+                spnPeso.setValue(1);
+                spnPrecio.setValue(1);
+
+                JOptionPane.showMessageDialog(null, "Producto agregado al pedido");
             }
         });
     }
